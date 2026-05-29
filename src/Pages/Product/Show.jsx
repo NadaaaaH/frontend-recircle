@@ -38,15 +38,19 @@ export default function Show() {
                     price: data.price,
                     original_price: null,
                     loc: data.campusLocation,
-                    img: data.images?.length > 0 ? data.images[0] : 'https://placehold.co/800x600/eeeeee/999999?text=Image+Not+Found',
-                    images: data.images || [],
+                    img: data.images?.length > 0 
+                        ? (data.images[0].startsWith('http') ? data.images[0] : `${import.meta.env.VITE_API_URL || ''}/storage/${data.images[0].replace(/^\/?(storage\/)?/, '')}`) 
+                        : 'https://placehold.co/800x600/eeeeee/999999?text=Image+Not+Found',
+                    images: (data.images || []).map(img => img.startsWith('http') ? img : `${import.meta.env.VITE_API_URL || ''}/storage/${img.replace(/^\/?(storage\/)?/, '')}`),
                     desc: data.description,
                     condition: data.condition,
                     posted_at: new Date(data.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }),
                     seller: {
                         id: data.seller?.id,
                         name: data.seller?.name || 'Unknown',
-                        avatar: data.seller?.avatar_url || `https://ui-avatars.com/api/?name=${data.seller?.name || 'User'}`,
+                        avatar: data.seller?.avatar_url 
+                            ? (data.seller.avatar_url.startsWith('http') ? data.seller.avatar_url : `${import.meta.env.VITE_API_URL || ''}/storage/${data.seller.avatar_url.replace(/^\/?(storage\/)?/, '')}`)
+                            : `https://ui-avatars.com/api/?name=${encodeURIComponent(data.seller?.name || 'User')}`,
                         kampus: data.seller?.kampus || data.campusLocation,
                         is_verified: data.seller?.is_seller || false
                     }

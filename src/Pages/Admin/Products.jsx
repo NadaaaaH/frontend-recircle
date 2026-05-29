@@ -249,7 +249,15 @@ export default function AdminProducts() {
                         <div className="flex items-center gap-3">
                           <div className="w-10 h-8 rounded bg-slate-50 border border-slate-100 overflow-hidden flex-shrink-0 flex items-center justify-center">
                             {product.image ? (
-                              <img src={product.image} alt="" className="w-full h-full object-cover" />
+                              <img 
+                                src={product.image.startsWith('http') ? product.image : `${import.meta.env.VITE_API_URL || ''}/storage/${product.image.replace(/^\/?(storage\/)?/, '')}`} 
+                                alt="" 
+                                className="w-full h-full object-cover" 
+                                onError={(e) => {
+                                  e.target.onerror = null;
+                                  e.target.src = "https://placehold.co/400x400/f3f4f6/9ca3af?text=No+Image";
+                                }}
+                              />
                             ) : (
                               <ImageIcon className="w-4 h-4 text-slate-300" />
                             )}

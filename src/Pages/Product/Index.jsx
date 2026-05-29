@@ -366,15 +366,27 @@ export default function Index() {
                 ) : filteredProducts.length > 0 ? (
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                         {filteredProducts.map((product) => {
+                            const getProductImageUrl = (path) => {
+                                if (!path || path === "/images/placeholder-product.png") return "/images/placeholder-product.png";
+                                if (path.startsWith('http') || path.startsWith('data:')) return path;
+                                return `${import.meta.env.VITE_API_URL || ''}/storage/${path.replace(/^\/?(storage\/)?/, '')}`;
+                            };
+                            
+                            const getAvatarUrl = (path) => {
+                                if (!path) return `https://ui-avatars.com/api/?name=${encodeURIComponent(sellerName)}&background=43552c&color=ffffff`;
+                                if (path.startsWith('http') || path.startsWith('data:')) return path;
+                                return `${import.meta.env.VITE_API_URL || ''}/storage/${path.replace(/^\/?(storage\/)?/, '')}`;
+                            };
+
                             const name = product.name || product.nama_barang;
                             const price = product.price || product.harga || 0;
-                            const img = product.img || product.gambar_url || "/images/placeholder-product.png";
+                            const img = getProductImageUrl(product.img || product.gambar_url);
                             const uni = product.campusLocation || product.loc || product.kampus_seller || product.location_uni || "Kampus Terdekat";
                             const categoryName = product.category?.name || product.category_name;
                             const condition = product.condition || product.tag || product.kondisi;
                             
                             const sellerName = product.seller?.name || product.seller_name || (typeof product.seller === "string" ? product.seller : "Seller");
-                            const sellerAvatar = product.seller?.avatar_url || product.seller_avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(sellerName)}&background=43552c&color=ffffff`;
+                            const sellerAvatar = getAvatarUrl(product.seller?.avatar_url || product.seller?.avatar || product.seller_avatar);
 
                             return (
                                 <Link

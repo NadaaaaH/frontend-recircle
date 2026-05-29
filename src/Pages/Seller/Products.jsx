@@ -32,6 +32,12 @@ export default function SellerProducts() {
 
     const formatPrice = (p) => 'Rp ' + Number(p || 0).toLocaleString('id-ID');
 
+    const getProductImageUrl = (path) => {
+        if (!path || path === "/images/placeholder-product.png") return "/images/placeholder-product.png";
+        if (path.startsWith('http') || path.startsWith('data:')) return path;
+        return `${import.meta.env.VITE_API_URL || ''}/storage/${path.replace(/^\/?(storage\/)?/, '')}`;
+    };
+
     useEffect(() => {
         document.title = "Kelola Produk | ReCircle";
         fetchProducts();
@@ -223,7 +229,7 @@ export default function SellerProducts() {
                         <div key={p.id} className="bg-white rounded-[1.25rem] overflow-hidden shadow-[0_2px_4px_rgba(0,0,0,0.02)] border border-slate-200/70 hover:border-slate-300 transition-all group flex flex-col">
                             <div className="aspect-[4/3] bg-slate-50 relative">
                                 <img 
-                                    src={p.img || '/images/placeholder-product.png'} 
+                                    src={getProductImageUrl(p.img)} 
                                     alt={p.name} 
                                     className={`w-full h-full object-cover ${activeTab !== 'active' ? 'grayscale opacity-75' : ''}`} 
                                     onError={(e) => { e.target.onerror = null; e.target.src = '/images/placeholder-product.png'; }}
@@ -334,7 +340,7 @@ export default function SellerProducts() {
                                         <td className="py-4 px-6">
                                             <div className="flex items-center gap-4">
                                                 <img 
-                                                    src={p.img || '/images/placeholder-product.png'} 
+                                                    src={getProductImageUrl(p.img)} 
                                                     alt="" 
                                                     className={`w-12 h-12 rounded-xl object-cover bg-slate-100 border border-slate-200/50 ${activeTab !== 'active' ? 'grayscale opacity-75' : ''}`} 
                                                     onError={(e) => { e.target.onerror = null; e.target.src = '/images/placeholder-product.png'; }}

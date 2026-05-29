@@ -19,15 +19,21 @@ export default function Index() {
             api.get('/wishlists')
                 .then(res => {
                     const data = res.data?.data || [];
-                    const formatted = data.map(item => ({
-                        id: item.id,
-                        name: item.name,
-                        category: item.category?.name || "Lainnya",
-                        price: item.price,
-                        loc: item.campusLocation,
-                        img: item.images?.length > 0 ? item.images[0] : null,
-                        status: item.status
-                    }));
+                    const formatted = data.map(item => {
+                        const rawImg = item.images?.length > 0 ? item.images[0] : null;
+                        const formattedImg = rawImg 
+                            ? (rawImg.startsWith('http') ? rawImg : `${import.meta.env.VITE_API_URL || ''}/storage/${rawImg.replace(/^\/?(storage\/)?/, '')}`)
+                            : null;
+                        return {
+                            id: item.id,
+                            name: item.name,
+                            category: item.category?.name || "Lainnya",
+                            price: item.price,
+                            loc: item.campusLocation,
+                            img: formattedImg,
+                            status: item.status
+                        };
+                    });
                     setWishlists(formatted);
                     
                     // Extract unique categories
