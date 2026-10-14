@@ -35,8 +35,12 @@ export default function AdminDashboard() {
             // Backend returns: { data: { stats, monthlyStats, recentActivities } }
             const payload = res.data?.data || res.data;
             setStats(payload.stats || payload);
-            setMonthlyStats(payload.monthly_stats || []);
-            setRecentActivities(Array.isArray(payload.recent_activities) ? payload.recent_activities.slice(0, 5) : []);
+            setMonthlyStats(payload.monthlyStats || payload.monthly_stats || []);
+            setRecentActivities(
+                Array.isArray(payload.recentActivities) 
+                    ? payload.recentActivities.slice(0, 5) 
+                    : (Array.isArray(payload.recent_activities) ? payload.recent_activities.slice(0, 5) : [])
+            );
         } catch (err) {
             console.error('Admin dashboard error:', err);
             const status = err.response?.status;
@@ -62,8 +66,8 @@ export default function AdminDashboard() {
             label: 'Total Pengguna',
             value: stats.totalUsers || 0,
             icon: Users,
-            bg: 'bg-blue-50',
-            textColor: 'text-blue-600',
+            bg: 'bg-[#43552c]/10',
+            textColor: 'text-[#43552c]',
             href: '/admin/users'
         },
         {
@@ -78,16 +82,16 @@ export default function AdminDashboard() {
             label: 'Total Transaksi',
             value: stats.totalTransactions || 0,
             icon: ShoppingCart,
-            bg: 'bg-[#d4a373]/10',
-            textColor: 'text-[#d4a373]',
+            bg: 'bg-[#43552c]/10',
+            textColor: 'text-[#43552c]',
             href: '/admin/transactions'
         },
         {
             label: 'Verifikasi Pending',
             value: stats.pendingVerifications || 0,
             icon: ShieldCheck,
-            bg: 'bg-red-50',
-            textColor: 'text-red-600',
+            bg: 'bg-[#43552c]/10',
+            textColor: 'text-[#43552c]',
             href: '/admin/verifications'
         },
     ] : [];
@@ -156,26 +160,26 @@ export default function AdminDashboard() {
                 {/* Stats Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     {statCards.map((stat, idx) => (
-                        <div key={idx} className="bg-white p-6 rounded-2xl shadow-[0_2px_4px_rgba(0,0,0,0.02)] border border-slate-200/60 group hover:shadow-md transition-shadow relative flex flex-col">
-                            <div className="flex items-start justify-between">
-                                <div className={`w-12 h-12 rounded-xl ${stat.bg} flex items-center justify-center`}>
-                                    <stat.icon className={`w-6 h-6 ${stat.textColor}`} />
+                        <div key={idx} className="bg-white border border-gray-100 rounded-2xl p-5 hover:shadow-md transition-all duration-300 relative flex flex-col justify-between group">
+                            <div className="flex items-start justify-between w-full">
+                                <div className="flex items-center gap-3">
+                                    <div className={`p-2.5 ${stat.bg} rounded-xl ${stat.textColor} flex items-center justify-center`}>
+                                        <stat.icon className="w-5 h-5 shrink-0" />
+                                    </div>
+                                    <span className="text-sm font-medium text-gray-500">{stat.label}</span>
                                 </div>
                                 <Link
                                     to={stat.href}
-                                    className="text-gray-300 hover:text-[#43552c] transition-colors p-1 relative z-10"
+                                    className="text-gray-400 hover:text-gray-600 transition-colors shrink-0"
                                     onClick={(e) => e.stopPropagation()}
                                 >
-                                    <ArrowUpRight className="w-5 h-5" />
+                                    <ArrowUpRight className="w-4 h-4 shrink-0" />
                                 </Link>
                             </div>
-                            <div className="mt-4">
-                                <h3 className="text-sm font-medium text-gray-500">{stat.label}</h3>
-                                <span className="text-2xl font-bold text-gray-900 mt-1 block">
-                                    {stat.value?.toLocaleString('id-ID')}
-                                </span>
+                            <div className="text-3xl font-bold text-gray-900 mt-4 mb-3">
+                                {stat.value?.toLocaleString('id-ID')}
                             </div>
-                            <Link to={stat.href} className="absolute inset-0 rounded-[2rem]" aria-label={stat.label} />
+                            <Link to={stat.href} className="absolute inset-0 rounded-2xl" aria-label={stat.label} />
                         </div>
                     ))}
                 </div>
@@ -183,7 +187,7 @@ export default function AdminDashboard() {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     {/* Bar Chart — Statistik Penjualan */}
                     <div className="lg:col-span-2 space-y-6">
-                        <div className="bg-white p-8 rounded-2xl shadow-[0_2px_4px_rgba(0,0,0,0.02)] border border-slate-200/60 flex flex-col h-full">
+                        <div className="bg-white p-6 rounded-2xl border border-gray-100 flex flex-col h-full hover:shadow-md transition-all duration-300">
                             <div className="flex items-center justify-between mb-8">
                                 <div>
                                     <h3 className="text-lg font-bold text-gray-900">Statistik Penjualan</h3>
