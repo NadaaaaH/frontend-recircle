@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // 1. Berikan fallback URL EC2 langsung agar aplikasi TIDAK crash jika env Vercel belum terbaca
 const rawAppUrl = import.meta.env.VITE_API_BASE_URL || 'https://tumbuhberbagi.duckdns.org/recircle/api/v1';
-const baseAppUrl = rawAppUrl.toString().trim().replace(/\/+$\vert{}\s+$/g, '');
+const baseAppUrl = rawAppUrl.toString().trim().replace(/\/+$|\s+$/g, '');
 
 // 2. Mencegah duplikasi '/api/v1' jika di env Vercel sudah ditulis '/api/v1'
 const finalBaseUrl = baseAppUrl.endsWith('/api/v1')
