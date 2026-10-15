@@ -13,6 +13,8 @@ const reverbPort = import.meta.env.VITE_REVERB_PORT ?? (window.location.protocol
 const reverbScheme = (import.meta.env.VITE_REVERB_SCHEME || (window.location.protocol === 'https:' ? 'https' : 'http')).toString();
 const isSecure = reverbScheme === 'https' || Number(reverbPort) === 443;
 
+import api from '@/lib/axios';
+
 window.Echo = new Echo({
     broadcaster: 'reverb',
     key: import.meta.env.VITE_REVERB_APP_KEY,
@@ -24,17 +26,9 @@ window.Echo = new Echo({
     authorizer: (channel, options) => {
         return {
             authorize: (socketId, callback) => {
-                // Dynamically leverage our project APP URL or fallback to localhost
-                const baseUrl = import.meta.env.VITE_APP_URL || 'http://localhost:8000';
-                // Normalize to clean broadcasting auth endpoint
-                axios.post(`${baseUrl.trim().replace(/\/$/, '')}/broadcasting/auth`, {
+                api.post('/broadcasting/auth', {
                     socket_id: socketId,
                     channel_name: channel.name
-                }, {
-                    headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
-                        'Accept': 'application/json',
-                    }
                 })
                 .then(response => {
                     callback(false, response.data);

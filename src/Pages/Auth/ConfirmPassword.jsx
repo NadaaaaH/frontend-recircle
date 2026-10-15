@@ -23,7 +23,7 @@ export default function ConfirmPassword() {
         setErrors({});
 
         try {
-            await api.post('http://localhost:8000/confirm-password', { password });
+            await api.post('/confirm-password', { password });
             navigate(-1); // Go back to the previous secure page
         } catch (err) {
             setErrors(err.response?.data?.errors || { password: 'Password confirmation failed.' });

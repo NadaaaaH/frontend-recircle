@@ -36,7 +36,7 @@ export default function ResetPassword() {
         setErrors({});
 
         try {
-            await api.post('http://localhost:8000/reset-password', data);
+            await api.post('/reset-password', data);
             navigate('/login', { state: { status: 'Password has been reset successfully. Please login.' } });
         } catch (err) {
             setErrors(err.response?.data?.errors || { email: 'Failed to reset password.' });

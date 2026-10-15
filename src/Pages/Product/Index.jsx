@@ -79,7 +79,7 @@ export default function Index() {
         const fetchUnis = async () => {
             try {
                 const response = await fetch(
-                    "http://universities.hipolabs.com/search?country=Indonesia",
+                    "https://universities.hipolabs.com/search?country=Indonesia",
                 );
                 const data = await response.json();
                 setUniversities(data.map((u) => u.name).sort());

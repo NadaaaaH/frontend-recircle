@@ -17,9 +17,8 @@ export default function VerifyEmail({ status }) {
     const submit = async (e) => {
         e.preventDefault();
         setProcessing(true);
-
         try {
-            await api.post('http://localhost:8000/email/verification-notification');
+            await api.post('/email/verification-notification');
             setServerStatus('verification-link-sent');
         } catch (err) {
             console.error('Failed to resend verification email', err);

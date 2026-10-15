@@ -20,10 +20,8 @@ export default function ForgotPassword({ status }) {
         setProcessing(true);
         setErrors({});
         setServerStatus('');
-
         try {
-            // Because auth routes are in web.php, use absolute URL to bypass /api/v1
-            const response = await api.post('http://localhost:8000/forgot-password', { email });
+            const response = await api.post('/forgot-password', { email });
             setServerStatus(response.data.status || 'Email sent successfully.');
         } catch (err) {
             setErrors(err.response?.data?.errors || { email: 'Failed to send reset link.' });

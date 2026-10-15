@@ -4,7 +4,6 @@ import MainLayout from '@/Layouts/MainLayout';
 import { ShieldCheck, MapPin, Package, ArrowLeft, CheckCircle, CreditCard, Loader2, Box } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import api from '@/lib/axios';
-import axios from 'axios';
 
 export default function Checkout() {
     const navigate = useNavigate();
@@ -104,9 +103,8 @@ export default function Checkout() {
         const fetchDestinations = async () => {
             setIsSearchingDest(true);
             try {
-                // Gunakan axios langsung untuk Komerce proxy atau api jika sudah ada di backend
-                const res = await axios.get(`http://localhost:8000/api/rajaongkir/destination?keyword=${debouncedKeyword}`);
-                setDestinations(res.data || []);
+                const res = await api.get(`/logistics/destination?keyword=${debouncedKeyword}`);
+                setDestinations(res.data?.data || res.data || []);
             } catch (error) {
                 console.error("Failed to fetch destinations", error);
             } finally {
@@ -157,7 +155,7 @@ export default function Checkout() {
                 ? product.seller_area_id 
                 : '34260'; // Default Safe Fallback
 
-            const res = await axios.post('http://localhost:8000/api/rajaongkir/calculate', {
+            const res = await api.post('/logistics/calculate', {
                 origin: originId,
                 destination: destId,
                 courier: courier,
