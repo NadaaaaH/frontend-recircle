@@ -116,6 +116,14 @@ function App() {
           }
         />
         <Route
+          path="/checkout"
+          element={
+            <ProtectedRoute>
+              <Checkout />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/payment/success"
           element={
             <ProtectedRoute>

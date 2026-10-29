@@ -441,9 +441,22 @@ export default function CartIndex() {
                       )}
                     </div>
                     <button
-                      onClick={() =>
-                        navigate("/checkout", { state: { selectedItems } })
-                      }
+                      onClick={() => {
+                        if (selectedItems.length === 0) return;
+                        let selectedCartItem = null;
+                        for (const group of groupedCarts) {
+                          const found = group.items.find((item) => item.id === selectedItems[0]);
+                          if (found) {
+                            selectedCartItem = found;
+                            break;
+                          }
+                        }
+                        if (selectedCartItem) {
+                          const productId = selectedCartItem.product?.id || selectedCartItem.id;
+                          const offerParam = selectedCartItem.offer?.id ? `?offer_id=${selectedCartItem.offer.id}` : '';
+                          navigate(`/checkout/${productId}${offerParam}`);
+                        }
+                      }}
                       className="flex-shrink-0 bg-[#40534C] hover:bg-[#2e3c36] text-white font-semibold text-sm px-6 py-3 rounded-xl transition-colors"
                     >
                       Bayar Sekarang
