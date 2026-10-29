@@ -47,6 +47,17 @@ export default function ProfileEditForm() {
     const handleAvatarChange = (e) => {
         const file = e.target.files[0];
         if (!file) return;
+
+        // Validasi ukuran file (maks 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+            setErrors((prev) => ({
+                ...prev,
+                avatar: ['Ukuran foto melebihi 5MB. Silakan pilih foto dengan ukuran lebih kecil.'],
+            }));
+            return;
+        }
+
+        setErrors((prev) => ({ ...prev, avatar: null, general: null }));
         setAvatarFile(file);
         setAvatarPreview(URL.createObjectURL(file));
     };
@@ -77,9 +88,15 @@ export default function ProfileEditForm() {
             console.error('[EditForm] Submit error:', err.response?.data || err.message);
             const data = err.response?.data;
             if (data?.errors) {
-                setErrors(data.errors);
+                const firstKey = Object.keys(data.errors)[0];
+                const firstVal = data.errors[firstKey];
+                const firstMsg = Array.isArray(firstVal) ? firstVal[0] : firstVal;
+                setErrors({
+                    ...data.errors,
+                    general: firstMsg || 'Terdapat kesalahan pada data yang Anda masukkan.',
+                });
             } else {
-                setErrors({ general: data?.message || 'Terjadi kesalahan, coba lagi.' });
+                setErrors({ general: data?.message || 'Terjadi kesalahan pada server, silakan coba lagi.' });
             }
         } finally {
             setIsLoading(false);
@@ -155,7 +172,7 @@ export default function ProfileEditForm() {
                                     <p className="text-sm font-semibold text-gray-900">
                                         {avatarFile ? avatarFile.name : 'Belum ada foto baru'}
                                     </p>
-                                    <p className="text-xs text-gray-400 mt-1">JPG, PNG, maks 2MB</p>
+                                    <p className="text-xs text-gray-400 mt-1">JPG, PNG, maks 5MB</p>
                                     <button
                                         type="button"
                                         onClick={() => fileInputRef.current?.click()}
@@ -163,6 +180,11 @@ export default function ProfileEditForm() {
                                     >
                                         Pilih foto baru
                                     </button>
+                                    {errors.avatar && (
+                                        <p className="text-xs text-red-500 font-semibold mt-1.5">
+                                            {Array.isArray(errors.avatar) ? errors.avatar[0] : errors.avatar}
+                                        </p>
+                                    )}
                                 </div>
                             </div>
                         </div>
