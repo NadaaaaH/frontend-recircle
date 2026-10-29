@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import MainLayout from "@/Layouts/MainLayout";
-import { ShoppingBag, ArrowLeft, Package, CheckCircle2 } from "lucide-react";
+import { ShoppingBag, ArrowLeft, Package, CheckCircle2, Loader2 } from "lucide-react";
 import api from "@/lib/axios";
 
 export default function BuyerOrders() {

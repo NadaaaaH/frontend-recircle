@@ -36,7 +36,7 @@ export default function SellerBalance() {
                 setTotalDilepas(data?.totalDilepas ?? 0);
                 setTotalDitahan(data?.totalDitahan ?? 0);
                 setTotalDitarik(data?.totalDitarik ?? 0);
-                setTransactions(data?.history?.data ?? []);
+                setTransactions(data?.history?.data ?? (Array.isArray(data?.history) ? data.history : []));
             })
             .catch((err) => {
                 console.error("Failed to fetch balance", err);

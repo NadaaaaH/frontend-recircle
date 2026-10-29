@@ -174,7 +174,7 @@ export default function ChatIndex() {
         }
 
         // Fetch messages from Database (MongoDB managed via Laravel API)
-        api.get(`/chat/${targetUser.id}`)
+        api.get(`/chat/${user.id}`)
             .then(res => {
                 const rawMessages = res.data?.data || [];
                 const formattedMessages = rawMessages.map(msg => ({

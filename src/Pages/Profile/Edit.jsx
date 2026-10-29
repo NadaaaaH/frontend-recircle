@@ -3,7 +3,7 @@ import MainLayout from "@/Layouts/MainLayout";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import {
-    User as UserIcon,
+    User,
     Settings,
     ShoppingBag,
     Clock,
@@ -93,7 +93,7 @@ export default function Edit() {
                                 <img
                                     src={
                                         user?.avatar_url
-                                            ? user.avatar
+                                            ? user.avatar_url
                                             : `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || 'User')}&background=43552c&color=fff`
                                     }
                                     alt={user?.name}

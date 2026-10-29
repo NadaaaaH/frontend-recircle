@@ -48,7 +48,10 @@ export default function Checkout() {
 
     // Fetch Checkout Data
     useEffect(() => {
-        if (!id) return;
+        if (!id) {
+            setIsLoading(false);
+            return;
+        }
         
         setIsLoading(true);
         api.get(`/checkout/${id}`, { params: { offer_id } })

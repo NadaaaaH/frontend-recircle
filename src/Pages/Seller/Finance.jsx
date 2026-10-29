@@ -29,8 +29,9 @@ export default function Finance() {
         new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(value || 0);
 
     // history dari API: { id, amount, status, releasedAt, createdAt, orderCode, productName }
-    const history = balanceData?.history?.data ?? [];
-    const totalDilepas = balanceData?.total_dilepas ?? 0;
+    const rawHistory = balanceData?.history;
+    const history = Array.isArray(rawHistory) ? rawHistory : (rawHistory?.data ?? []);
+    const totalDilepas = balanceData?.total_dilepas ?? balanceData?.totalDilepas ?? 0;
 
     // Dana tertahan = total jumlah status 'ditahan'
     const totalDitahan = history
